@@ -1,11 +1,6 @@
-//Vaarun's 420 Class Template + Sugar Sugar Inspo 
-//Box2D Physics Engine Experiment
-
-import org.jbox2d.common.*;
-import org.jbox2d.collision.*;
-import org.jbox2d.callbacks.*;
-import org.jbox2d.dynamics.*;
-
+class SceneGameOver{
+  
+  
 World world;
 float timeStep = 1.0/30.0f;
 
@@ -17,19 +12,20 @@ PImage cup;
 //Positions 
 float startX = 485;
 float startY = 640;
-int timerX = 50;
-int timerY = 40;
-
 
 //drawing to be neater 
 float prevFrame;
 float currFrame;
 
-float timer = 900;
-float timeLeft;
-
-void setup() {
+float timer = 500;
+void setup() {///////////////////////////////////////////////////////////////////////////////////////////
   size(800, 600, P2D);
+
+  ////Coding Train
+  //box2d = new PBox2D(this);
+  //box2d.createWorld();
+  ////Create ArrayLists
+  //boxes = new Arraylist<Box>();
 
   cup = loadImage("cup.png");
 
@@ -39,7 +35,8 @@ void setup() {
   // floor
   MakeABox(new Vec2(0, 600), 800, 10, true);
 
-
+  //enble Collision Listening 
+  //box2d.listenForCollisions();
 
 
   // create a dynamic box:
@@ -47,24 +44,23 @@ void setup() {
   //boxBody.setAngularVelocity(1);
 }
 void update() {
+  
+  if (timer > 0){ //start timer
+   timer --; 
+   
+  }
+  if (timer == 0){ //reset timer
+    timer = 500;
+    
+  }
+  print(timer);
+  
 }
-void draw() {
+void draw() {///////////////////////////////////////////////////////////////////////////////////////////
 
-  //Timer
-  if (timer > 0) { //start timer
-    timer --; 
-  }
-  if (timer == 0) { //reset timer
-    timer = 900;
-  }
-  
-  timeLeft = map(timer, 600, 0, 6, 0);
-  
-  
-  
-  
-  
-  
+  //Coding train 
+  //box2d.step();
+
   world.step(timeStep, 6, 2);
 
   //Wipes Screen
@@ -84,15 +80,6 @@ void draw() {
   textSize(80);
   //text("salt, salt", 340, 100); //starting point at 485
   text("SALT, SALT", 280, 25);
-
-  //Timer
-  textSize(30);
-  text(round(timeLeft, 1), timerX, timerY);
-  fill(0);
-  rect(timerX + 60, timerY, 100, 100);
-
-
-
 
   //How to Play  
   fill(255, 30);
@@ -119,23 +106,37 @@ void draw() {
 
 
 Body MakeABox(Vec2 pos, float w, float h, boolean fixed) {
-
+  //Step 1: Define Body 
   BodyDef def = new BodyDef();
   def.type = fixed ? BodyType.STATIC : BodyType.DYNAMIC;
   def.position = pos;
 
+  //Step 2: Create Body 
   Body body = world.createBody(def);
 
   PolygonShape shape = new PolygonShape();
   shape.setAsBox(w, h);
 
+  //Step 3: Create Shape
   FixtureDef fixture = new FixtureDef();
   fixture.shape = shape;
   fixture.density = 1;
   fixture.friction = .5;
   fixture.restitution = 0;
+  
+  //Convert to world
+  //float box2Dw = fixture.scalarPixelsToWorld(w/2);
 
+
+  //Step 4: Create Fixture 
   body.createFixture(fixture);
+
+
+
+
+  //if (pos.y > 400) {
+  //  fixture.destroyBody(body);
+  //}
   return body;
 }
 
@@ -181,9 +182,16 @@ void mouseDragged() {
   rect(mouseX, mouseY, 3, 3);
 }
 
-  //Rounding 
-  //from https://stackoverflow.com/questions/22186778/using-math-round-to-round-to-one-decimal-place
-  float round (float value, int precision) {
-    int scale = (int) Math.pow(10, precision);
-    return (float) Math.round(value * scale) / scale;
-  }
+void isDead() {
+  // killBody();
+}
+
+
+void beginContact(Contact contact) { 
+  //tells which Fixture collided
+
+  //which Body is it attached to
+
+  //which of our object is associated with that body? (our job, not box 2d like those^)
+}
+}
