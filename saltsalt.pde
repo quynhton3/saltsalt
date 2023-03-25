@@ -9,29 +9,45 @@ import org.jbox2d.dynamics.*;
 World world;
 float timeStep = 1.0/30.0f;
 
+
+//UI Game Variables
+int salt = 0;
+PImage cup;
+
+//Positions 
+float startX = 485;
+float startY = 640;
+
+//drawing to be neater 
+float prevFrame;
+float currFrame;
 void setup() {
   size(800, 600, P2D);
+
+  cup = loadImage("cup.png");
 
   // create the world:
   world = new World(new Vec2(0, 50), true);
 
-  // create a static box:
+  // floor
   MakeABox(new Vec2(0, 600), 800, 10, true);
 
-  text("salt, salt", 100, 100, 100, 100);
+
+
 
   // create a dynamic box:
   //Body boxBody = MakeABox(new Vec2(400, 50), 10, 10, false);
   //boxBody.setAngularVelocity(1);
 }
 void update() {
-  
-  
 }
 void draw() {
 
+
+
   world.step(timeStep, 6, 2);
 
+  //Wipes Screen
   background(0);
 
   for (Body body = world.getBodyList(); body != null; body = body.getNext()) {
@@ -39,14 +55,39 @@ void draw() {
   }
 
 
-  //Salt Falls
-  MakeABox(new Vec2(mouseX, mouseY), 1, 1, false);
+  //Salt Fallss
+  MakeABox(new Vec2(random(startX, startX+ 5), 112), 1, 1, false);
 
   //UI
+  textAlign(LEFT, TOP);
   fill(255, 90);
   textSize(80);
-  text("salt, salt", 400, 30, 100, 100);
+  //text("salt, salt", 340, 100); //starting point at 485
+  text("SALT, SALT", 280, 25);
+
+  //How to Play  
+  fill(255, 30);
+  textSize(30);
+  text("draw with your mouse ", 100, 300);
+  text("to get the salt AWAY from the cup...", 100, 330);
+
+  //Cup
+  fill(200, 0, 0);
+  rect(startX- 15, 550, 35, 40);
+  image(cup, startX- 15, 550);
+
+
+  //# Salt in Cup 
+  textSize(20);
+  fill(0, 70);
+  textAlign(CENTER, CENTER);
+  text(salt, startX, startY - 70);
+
+
+  //Drawing
+  rect(mouseX, mouseY, 1, 1);
 }
+
 
 Body MakeABox(Vec2 pos, float w, float h, boolean fixed) {
 
@@ -66,11 +107,11 @@ Body MakeABox(Vec2 pos, float w, float h, boolean fixed) {
   fixture.restitution = 0;
 
   body.createFixture(fixture);
-
   return body;
 }
 
 void DrawPolygonShapeFromBody(Body body) {
+
   pushMatrix();
   Vec2 pos = body.getPosition();
   translate(pos.x, pos.y);
@@ -95,8 +136,18 @@ void DrawPolygonShapeFromBody(Body body) {
 void drawing() {
 }
 
-void mousePressed() {
+void mouseDragged() {
 
   fill(200, 0, 0);
-  rect(mouseX, mouseY, 100, 100);
+  MakeABox(new Vec2(mouseX, mouseY), 3, 3, true);
+  MakeABox(new Vec2(mouseX +1, mouseY +1), 3, 3, true);
+  MakeABox(new Vec2(mouseX-1, mouseY-1), 3, 3, true);
+
+  //filling in the gaps
+  MakeABox(new Vec2(mouseX+.5, mouseY+.5), 3, 3, true);
+  MakeABox(new Vec2(mouseX-.5, mouseY-.5), 3, 3, true);
+
+
+
+  rect(mouseX, mouseY, 3, 3);
 }
