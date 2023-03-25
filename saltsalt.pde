@@ -24,6 +24,10 @@ void setup() {
   //Body boxBody = MakeABox(new Vec2(400, 50), 10, 10, false);
   //boxBody.setAngularVelocity(1);
 }
+void update() {
+  
+  
+}
 void draw() {
 
   world.step(timeStep, 6, 2);
@@ -33,6 +37,15 @@ void draw() {
   for (Body body = world.getBodyList(); body != null; body = body.getNext()) {
     DrawPolygonShapeFromBody(body);
   }
+
+
+  //Salt Falls
+  MakeABox(new Vec2(mouseX, mouseY), 1, 1, false);
+
+  //UI
+  fill(255, 90);
+  textSize(80);
+  text("salt, salt", 400, 30, 100, 100);
 }
 
 Body MakeABox(Vec2 pos, float w, float h, boolean fixed) {
@@ -55,10 +68,6 @@ Body MakeABox(Vec2 pos, float w, float h, boolean fixed) {
   body.createFixture(fixture);
 
   return body;
-
-
-
-
 }
 
 void DrawPolygonShapeFromBody(Body body) {
@@ -83,9 +92,11 @@ void DrawPolygonShapeFromBody(Body body) {
   popMatrix();
 }
 
-
+void drawing() {
+}
 
 void mousePressed() {
-    MakeABox(new Vec2(mouseX, mouseY), 1, 1, false);
 
+  fill(200, 0, 0);
+  rect(mouseX, mouseY, 100, 100);
 }
